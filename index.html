@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RecallGuard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #172033;
+        }
+
+        .subtitle {
+            color: #667085;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        input {
+            padding: 12px;
+            margin: 6px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #172033;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .alert {
+            background: #ffe5e5;
+            border-left: 6px solid #e53935;
+            padding: 18px;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+
+        .safe {
+            background: #e7f7ed;
+            border-left: 6px solid #22a05a;
+            padding: 18px;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🛡️ RecallGuard</h1>
+
+    <p class="subtitle">
+        Medicine Recall Detection System
+    </p>
+
+    <div class="card">
+
+        <h2>Check Medicine Batch</h2>
+
+        <input id="medicine" placeholder="Medicine name">
+        <input id="manufacturer" placeholder="Manufacturer">
+        <input id="batch" placeholder="Batch number">
+
+        <br>
+
+        <button onclick="checkRecall()">
+            Scan Batch
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function checkRecall() {
+
+    const medicine = document.getElementById("medicine").value;
+    const manufacturer = document.getElementById("manufacturer").value;
+    const batch = document.getElementById("batch").value;
+
+    const result = document.getElementById("result");
+
+    result.innerHTML = "<p>Checking RecallGuard database...</p>";
+
+    const response = await fetch("/check", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            medicine: medicine,
+            manufacturer: manufacturer,
+            batch: batch
+        })
+
+    });
+
+    const data = await response.json();
+
+    if (data.recalled) {
+
+        result.innerHTML = `
+            <div class="alert">
+
+                <h2>🚨 RECALL ALERT</h2>
+
+                <p><strong>Medicine:</strong> ${data.medicine}</p>
+
+                <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
+
+                <p><strong>Batch:</strong> ${data.batch}</p>
+
+                <p><strong>Reason:</strong> ${data.reason}</p>
+
+                <p><strong>Action:</strong>
+                Remove/quarantine affected stock.</p>
+
+            </div>
+        `;
+
+    } else {
+
+        result.innerHTML = `
+            <div class="safe">
+
+                <h2>🟢 No Matching Recall Found</h2>
+
+                <p>
+                No matching recall was found in the RecallGuard database.
+                </p>
+
+            </div>
+        `;
+    }
+
+}
+
+</script>
+
+</body>
+</html>
