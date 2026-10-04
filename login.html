@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | RecallGuard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0b1020;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+            padding: 25px;
+        }
+
+        .login-card {
+            background: #11182b;
+            border: 1px solid #252d45;
+            border-radius: 20px;
+            padding: 42px 38px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 220px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 27px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8f98ad;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #cbd1df;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            background: #0b1020;
+            border: 1px solid #2b344d;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #7c5cff;
+            box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.12);
+        }
+
+        input::placeholder {
+            color: #687187;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0 25px;
+            font-size: 13px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #8f98ad;
+        }
+
+        .remember input {
+            width: auto;
+            accent-color: #7c5cff;
+        }
+
+        .forgot {
+            color: #9b82ff;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #7657ff, #8c5cff);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(124, 92, 255, 0.25);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ff8585;
+            padding: 11px;
+            border-radius: 9px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            color: #626b80;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="logo">
+            <img src="logo.png" alt="RecallGuard">
+        </div>
+
+        <div class="title">
+            Welcome Back
+        </div>
+
+        <div class="subtitle">
+            Sign in to access your RecallGuard dashboard
+        </div>
+
+        <div class="error" id="errorMessage">
+            Invalid email or password.
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <div class="options">
+
+                <label class="remember">
+                    <input type="checkbox" id="remember">
+                    Remember me
+                </label>
+
+                <a href="#" class="forgot">
+                    Forgot password?
+                </a>
+
+            </div>
+
+            <button type="submit" class="login-btn">
+                Sign In
+            </button>
+
+        </form>
+
+        <div class="footer">
+            RecallGuard © 2026
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+async function handleLogin(event) {
+
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const error = document.getElementById("errorMessage");
+    const button = document.querySelector(".login-btn");
+
+    error.style.display = "none";
+
+    if (!email || !password) {
+        error.textContent = "Please enter your email and password.";
+        error.style.display = "block";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Signing in...";
+
+    try {
+
+        const response = await fetch("/login", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            window.location.href = "/dashboard";
+
+        } else {
+
+            error.textContent = data.message || "Invalid email or password.";
+            error.style.display = "block";
+
+            button.disabled = false;
+            button.textContent = "Sign In";
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        error = document.getElementById("errorMessage");
+        error.textContent = "Unable to connect to RecallGuard.";
+        error.style.display = "block";
+
+        button.disabled = false;
+        button.textContent = "Sign In";
+    }
+}
+
+</script>
+
+</body>
+</html>

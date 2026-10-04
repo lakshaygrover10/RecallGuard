@@ -1,172 +1,2185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>RecallGuard</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            margin: 0;
-            padding: 40px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
+<title>RecallGuard | Dashboard</title>
 
-        h1 {
-            color: #172033;
-        }
+<style>
 
-        .subtitle {
-            color: #667085;
-        }
+/* =========================================================
+   RESET
+========================================================= */
 
-        .card {
-            background: white;
-            padding: 25px;
-            margin-top: 25px;
-            border-radius: 12px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        input {
-            padding: 12px;
-            margin: 6px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
+:root {
 
-        button {
-            padding: 12px 20px;
-            background: #172033;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+    --bg: #080c19;
+    --sidebar: #0c1221;
 
-        .alert {
-            background: #ffe5e5;
-            border-left: 6px solid #e53935;
-            padding: 18px;
-            margin-top: 20px;
-            border-radius: 6px;
-        }
+    --panel: #10182a;
+    --panel2: #0d1526;
 
-        .safe {
-            background: #e7f7ed;
-            border-left: 6px solid #22a05a;
-            padding: 18px;
-            margin-top: 20px;
-            border-radius: 6px;
-        }
-    </style>
-</head>
+    --border: #26334d;
+    --border-light: #34415d;
 
-<body>
+    --white: #f7f8fc;
+    --text: #dce2ec;
 
-<div class="container">
+    --muted: #9aa6ba;
+    --muted2: #7d899f;
+    --muted3: #64718a;
 
-    <h1>🛡️ RecallGuard</h1>
+    --purple: #7955ff;
+    --purple-light: #a184ff;
 
-    <p class="subtitle">
-        Medicine Recall Detection System
-    </p>
+    --green: #65d6a0;
+    --red: #ff7180;
+}
 
-    <div class="card">
+body {
 
-        <h2>Check Medicine Batch</h2>
+    background: var(--bg);
 
-        <input id="medicine" placeholder="Medicine name">
-        <input id="manufacturer" placeholder="Manufacturer">
-        <input id="batch" placeholder="Batch number">
+    color: var(--white);
 
-        <br>
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-        <button onclick="checkRecall()">
-            Scan Batch
-        </button>
-
-        <div id="result"></div>
-
-    </div>
-
-</div>
+    min-height: 100vh;
+}
 
 
-<script>
+/* =========================================================
+   APP
+========================================================= */
 
-async function checkRecall() {
+.app {
 
-    const medicine = document.getElementById("medicine").value;
-    const manufacturer = document.getElementById("manufacturer").value;
-    const batch = document.getElementById("batch").value;
+    min-height: 100vh;
 
-    const result = document.getElementById("result");
+    display: flex;
+}
 
-    result.innerHTML = "<p>Checking RecallGuard database...</p>";
 
-    const response = await fetch("/check", {
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
-        method: "POST",
+.sidebar {
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+    width: 240px;
 
-        body: JSON.stringify({
-            medicine: medicine,
-            manufacturer: manufacturer,
-            batch: batch
-        })
+    min-height: 100vh;
 
-    });
+    flex-shrink: 0;
 
-    const data = await response.json();
+    background: var(--sidebar);
 
-    if (data.recalled) {
+    border-right: 1px solid var(--border);
 
-        result.innerHTML = `
-            <div class="alert">
+    padding: 28px 16px;
+}
 
-                <h2>🚨 RECALL ALERT</h2>
 
-                <p><strong>Medicine:</strong> ${data.medicine}</p>
+/* LOGO */
 
-                <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
+.logo {
 
-                <p><strong>Batch:</strong> ${data.batch}</p>
+    padding: 0 13px;
 
-                <p><strong>Reason:</strong> ${data.reason}</p>
+    margin-bottom: 35px;
+}
 
-                <p><strong>Action:</strong>
-                Remove/quarantine affected stock.</p>
+.logo img {
 
-            </div>
-        `;
+    width: 175px;
 
-    } else {
+    display: block;
+}
 
-        result.innerHTML = `
-            <div class="safe">
 
-                <h2>🟢 No Matching Recall Found</h2>
+/* NAV */
 
-                <p>
-                No matching recall was found in the RecallGuard database.
-                </p>
+.nav-section {
 
-            </div>
-        `;
+    margin-bottom: 27px;
+}
+
+.nav-title {
+
+    color: #65728a;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    padding: 0 13px;
+
+    margin-bottom: 9px;
+}
+
+.nav-item {
+
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 0 13px;
+
+    margin-bottom: 4px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    border-radius: 8px;
+
+    color: #9ba6b9;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: .18s;
+}
+
+.nav-item:hover {
+
+    color: white;
+
+    background: rgba(255,255,255,.035);
+}
+
+.nav-item.active {
+
+    color: white;
+
+    background: rgba(121,85,255,.14);
+
+    border: 1px solid rgba(121,85,255,.18);
+}
+
+.nav-icon {
+
+    width: 19px;
+
+    text-align: center;
+
+    color: #8290a8;
+
+    font-size: 15px;
+}
+
+.nav-item.active .nav-icon {
+
+    color: var(--purple-light);
+}
+
+
+/* ACCOUNT */
+
+.account-section {
+
+    margin-top: 4px;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main-content {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 34px 38px 55px;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 29px;
+}
+
+.page-heading h1 {
+
+    font-size: 29px;
+
+    line-height: 1.2;
+
+    letter-spacing: -.7px;
+
+    margin-bottom: 8px;
+}
+
+.page-heading p {
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* SEARCH */
+
+.search-box {
+
+    width: 330px;
+
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 14px;
+
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+}
+
+.search-icon {
+
+    color: #78859c;
+
+    font-size: 15px;
+}
+
+.search-box input {
+
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 13px;
+}
+
+.search-box input::placeholder {
+
+    color: #748198;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 23px;
+}
+
+.stat-card {
+
+    min-height: 132px;
+
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,26,45,.98),
+            rgba(12,19,33,.98)
+        );
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+}
+
+.stat-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 13px;
+}
+
+.stat-label {
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.stat-icon {
+
+    color: var(--purple-light);
+
+    font-size: 15px;
+}
+
+.stat-number {
+
+    color: var(--white);
+
+    font-size: 29px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    margin-bottom: 8px;
+}
+
+.stat-description {
+
+    color: var(--muted3);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   TWO COLUMN AREA
+========================================================= */
+
+.two-column {
+
+    display: grid;
+
+    grid-template-columns:
+        1.4fr .6fr;
+
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,26,45,.98),
+            rgba(12,19,33,.98)
+        );
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    overflow: hidden;
+}
+
+.panel-header {
+
+    padding: 20px 23px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-header h2 {
+
+    color: var(--white);
+
+    font-size: 17px;
+
+    line-height: 1.3;
+
+    margin-bottom: 6px;
+}
+
+.panel-header p {
+
+    color: var(--muted2);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BATCH CHECKER
+========================================================= */
+
+.check-body {
+
+    padding: 23px;
+}
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr .8fr .85fr;
+
+    gap: 12px;
+}
+
+.form-group label {
+
+    display: block;
+
+    color: #8491a8;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .4px;
+
+    margin-bottom: 8px;
+}
+
+.form-group input {
+
+    width: 100%;
+
+    height: 45px;
+
+    padding: 0 13px;
+
+    background: #090f1d;
+
+    border: 1px solid #2c3954;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    color: var(--text);
+
+    font-size: 13px;
+}
+
+.form-group input::placeholder {
+
+    color: #718097;
+}
+
+.form-group input:focus {
+
+    border-color: #7658f3;
+
+    box-shadow:
+        0 0 0 2px rgba(121,85,255,.08);
+}
+
+.check-row {
+
+    margin-top: 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.check-help {
+
+    color: #8491a8;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.check-button {
+
+    flex-shrink: 0;
+
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7654f5,
+            #9061ff
+        );
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* CHECK RESULT */
+
+.check-result {
+
+    display: none;
+
+    margin-top: 17px;
+
+    padding: 16px;
+
+    border-radius: 9px;
+
+    background: rgba(121,85,255,.06);
+
+    border: 1px solid rgba(121,85,255,.2);
+}
+
+.check-result.show {
+
+    display: block;
+}
+
+.result-heading {
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.result-heading.match {
+
+    color: var(--red);
+}
+
+.result-heading.safe {
+
+    color: var(--green);
+}
+
+.result-details {
+
+    color: #9ba6b9;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   DATABASE STATUS
+========================================================= */
+
+.database-body {
+
+    min-height: 265px;
+
+    padding: 24px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.donut {
+
+    width: 125px;
+
+    height: 125px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        conic-gradient(
+            var(--purple) 0deg 360deg
+        );
+
+    position: relative;
+
+    margin-bottom: 20px;
+}
+
+.donut::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 91px;
+
+    height: 91px;
+
+    border-radius: 50%;
+
+    background: var(--panel);
+}
+
+.donut-number {
+
+    position: relative;
+
+    z-index: 2;
+
+    color: white;
+
+    font-size: 26px;
+
+    font-weight: 700;
+}
+
+.database-title {
+
+    color: #e0e5ed;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+.database-subtitle {
+
+    color: #7b879e;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   RECENT ALERTS
+========================================================= */
+
+.alert-panel {
+
+    margin-bottom: 20px;
+}
+
+.alert-list {
+
+    padding: 3px 23px 8px;
+}
+
+.alert-row {
+
+    padding: 17px 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #202b42;
+}
+
+.alert-row:last-child {
+
+    border-bottom: none;
+}
+
+.alert-main {
+
+    min-width: 0;
+}
+
+.alert-medicine {
+
+    color: #e0e5ed;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    margin-bottom: 6px;
+}
+
+.alert-meta {
+
+    color: #7f8ca3;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.alert-badge {
+
+    flex-shrink: 0;
+
+    padding: 6px 10px;
+
+    border-radius: 6px;
+
+    color: #ff8b96;
+
+    background: rgba(255,111,125,.07);
+
+    border: 1px solid rgba(255,111,125,.16);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   INVENTORY TABLE
+========================================================= */
+
+.table-panel {
+
+    margin-top: 20px;
+}
+
+.table-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+table {
+
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: collapse;
+}
+
+thead {
+
+    background: rgba(255,255,255,.015);
+}
+
+th {
+
+    padding: 14px 18px;
+
+    text-align: left;
+
+    color: #748199;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .35px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+
+    padding: 16px 18px;
+
+    color: #aab4c5;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    border-bottom: 1px solid #1e293f;
+}
+
+td:first-child {
+
+    color: #e0e5ed;
+
+    font-weight: 600;
+}
+
+tbody tr:hover {
+
+    background: rgba(255,255,255,.015);
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+
+    padding: 25px;
+
+    text-align: center;
+
+    color: #7c899f;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+
+        width: 220px;
+    }
+
+    .stats-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .two-column {
+
+        grid-template-columns: 1fr;
     }
 
 }
 
+
+@media (max-width: 800px) {
+
+    .app {
+
+        display: block;
+    }
+
+    .sidebar {
+
+        width: 100%;
+
+        min-height: auto;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--border);
+
+        padding: 18px;
+    }
+
+    .logo {
+
+        margin-bottom: 20px;
+    }
+
+    .nav-section {
+
+        margin-bottom: 12px;
+    }
+
+    .nav-item {
+
+        display: inline-flex;
+
+        width: auto;
+
+        margin-right: 4px;
+    }
+
+    .main-content {
+
+        padding: 25px 18px 45px;
+    }
+
+    .page-header {
+
+        flex-direction: column;
+    }
+
+    .search-box {
+
+        width: 100%;
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .stats-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .check-row {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .check-button {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+
+    <div class="logo">
+
+        <img
+            src="logo.png"
+            alt="RecallGuard">
+
+    </div>
+
+
+    <!-- WORKSPACE -->
+
+    <div class="nav-section">
+
+        <div class="nav-title">
+            WORKSPACE
+        </div>
+
+
+        <a
+            href="/dashboard"
+            class="nav-item active">
+
+            <span class="nav-icon">⌂</span>
+
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <div
+            class="nav-item"
+            onclick="scrollToSection('records-section')">
+
+            <span class="nav-icon">▣</span>
+
+            <span>Inventory</span>
+
+        </div>
+
+
+        <div
+            class="nav-item"
+            onclick="scrollToSection('alerts-section')">
+
+            <span class="nav-icon">!</span>
+
+            <span>Recall Alerts</span>
+
+        </div>
+
+
+        <div class="nav-item">
+
+            <span class="nav-icon">◷</span>
+
+            <span>Expiring Soon</span>
+
+        </div>
+
+
+        <div class="nav-item">
+
+            <span class="nav-icon">◇</span>
+
+            <span>Manufacturers</span>
+
+        </div>
+
+
+        <div class="nav-item">
+
+            <span class="nav-icon">▤</span>
+
+            <span>Reports</span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACCOUNT -->
+
+    <div class="nav-section account-section">
+
+        <div class="nav-title">
+            ACCOUNT
+        </div>
+
+
+        <div class="nav-item">
+
+            <span class="nav-icon">●</span>
+
+            <span>User</span>
+
+        </div>
+
+
+        <!-- LOGOUT DIRECTLY BELOW USER -->
+
+        <a
+            href="/logout"
+            class="nav-item">
+
+            <span class="nav-icon">↪</span>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="main-content">
+
+
+    <!-- HEADER -->
+
+    <header class="page-header">
+
+
+        <div class="page-heading">
+
+            <h1>
+                Inventory Overview
+            </h1>
+
+            <p>
+                Monitor medicine batches and regulatory quality alerts.
+            </p>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <span class="search-icon">
+                ⌕
+            </span>
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Search medicine, batch or manufacturer..."
+                oninput="filterTable()">
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-label">
+                    CDSCO Records
+                </div>
+
+                <div class="stat-icon">
+                    ▣
+                </div>
+
+            </div>
+
+
+            <div
+                class="stat-number"
+                id="totalRecords">
+
+                —
+
+            </div>
+
+
+            <div class="stat-description">
+                June 2025 dataset
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-label">
+                    Recall Alerts
+                </div>
+
+                <div class="stat-icon">
+                    !
+                </div>
+
+            </div>
+
+
+            <div
+                class="stat-number"
+                id="totalAlerts">
+
+                —
+
+            </div>
+
+
+            <div class="stat-description">
+                NSQ records
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-label">
+                    Expiring Soon
+                </div>
+
+                <div class="stat-icon">
+                    ◷
+                </div>
+
+            </div>
+
+
+            <div class="stat-number">
+                —
+            </div>
+
+
+            <div class="stat-description">
+                Expiry tracking
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-label">
+                    Manufacturers
+                </div>
+
+                <div class="stat-icon">
+                    ◇
+                </div>
+
+            </div>
+
+
+            <div
+                class="stat-number"
+                id="manufacturers">
+
+                —
+
+            </div>
+
+
+            <div class="stat-description">
+                Unique manufacturers
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         CHECK + DATABASE
+    ================================================= -->
+
+    <section class="two-column">
+
+
+        <!-- CHECK BATCH -->
+
+        <div class="panel">
+
+
+            <div class="panel-header">
+
+                <h2>
+                    Check a Medicine Batch
+                </h2>
+
+                <p>
+                    Compare medicine details with available recall records.
+                </p>
+
+            </div>
+
+
+            <div class="check-body">
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            MEDICINE
+                        </label>
+
+                        <input
+                            id="medicine"
+                            type="text"
+                            placeholder="Enter medicine name">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            MANUFACTURER
+                        </label>
+
+                        <input
+                            id="manufacturer"
+                            type="text"
+                            placeholder="Enter manufacturer">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            BATCH NUMBER
+                        </label>
+
+                        <input
+                            id="batch"
+                            type="text"
+                            placeholder="Enter batch number">
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="check-row">
+
+
+                    <div class="check-help">
+
+                        Enter all three details for the most accurate
+                        batch-level match.
+
+                    </div>
+
+
+                    <button
+                        class="check-button"
+                        onclick="checkBatch()">
+
+                        CHECK BATCH
+
+                    </button>
+
+
+                </div>
+
+
+                <div
+                    id="checkResult"
+                    class="check-result">
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DATABASE -->
+
+        <div class="panel">
+
+
+            <div class="panel-header">
+
+                <h2>
+                    Database Status
+                </h2>
+
+                <p>
+                    Current loaded dataset.
+                </p>
+
+            </div>
+
+
+            <div class="database-body">
+
+
+                <div class="donut">
+
+                    <div
+                        class="donut-number"
+                        id="donutNumber">
+
+                        —
+
+                    </div>
+
+                </div>
+
+
+                <div class="database-title">
+                    CDSCO NSQ Records
+                </div>
+
+
+                <div class="database-subtitle">
+                    June 2025
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         RECENT ALERTS
+    ================================================= -->
+
+    <section
+        class="panel alert-panel"
+        id="alerts-section">
+
+
+        <div class="panel-header">
+
+            <h2>
+                Recent Recall Alerts
+            </h2>
+
+            <p>
+                Latest records in the current dataset.
+            </p>
+
+        </div>
+
+
+        <div
+            class="alert-list"
+            id="recentAlerts">
+
+            <div class="loading">
+                Loading records...
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         INVENTORY TABLE
+    ================================================= -->
+
+    <section
+        class="panel table-panel"
+        id="records-section">
+
+
+        <div class="panel-header">
+
+            <h2>
+                Medicine Inventory
+            </h2>
+
+            <p>
+                CDSCO NSQ records loaded into RecallGuard.
+            </p>
+
+        </div>
+
+
+        <div class="table-container">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            MEDICINE
+                        </th>
+
+                        <th>
+                            MANUFACTURER
+                        </th>
+
+                        <th>
+                            BATCH
+                        </th>
+
+                        <th>
+                            REASON
+                        </th>
+
+                        <th>
+                            EXPIRY
+                        </th>
+
+                        <th>
+                            REPORTED BY
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="recordsTable">
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="loading">
+
+                            Loading records...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let allRecords = [];
+
+
+/* =========================================================
+   LOAD DASHBOARD
+========================================================= */
+
+async function loadDashboard() {
+
+    try {
+
+        const response =
+            await fetch("/dashboard-data");
+
+
+        if (response.redirected) {
+
+            window.location.href = "/login";
+
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        document.getElementById(
+            "totalRecords"
+        ).textContent =
+            data.total_records;
+
+
+        document.getElementById(
+            "totalAlerts"
+        ).textContent =
+            data.alerts;
+
+
+        document.getElementById(
+            "manufacturers"
+        ).textContent =
+            data.manufacturers;
+
+
+        document.getElementById(
+            "donutNumber"
+        ).textContent =
+            data.total_records;
+
+
+        allRecords =
+            data.records || [];
+
+
+        renderRecentAlerts(
+            data.recent || []
+        );
+
+
+        renderTable(
+            allRecords
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "recentAlerts"
+        ).innerHTML = `
+
+            <div class="loading">
+                Unable to load dashboard data.
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RECENT ALERTS
+========================================================= */
+
+function renderRecentAlerts(records) {
+
+    const container =
+        document.getElementById(
+            "recentAlerts"
+        );
+
+
+    if (!records.length) {
+
+        container.innerHTML = `
+
+            <div class="loading">
+                No records found.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        records.map(record => `
+
+            <div class="alert-row">
+
+                <div class="alert-main">
+
+                    <div class="alert-medicine">
+
+                        ${escapeHtml(
+                            record.medicine || "Unknown medicine"
+                        )}
+
+                    </div>
+
+
+                    <div class="alert-meta">
+
+                        Batch:
+                        ${escapeHtml(
+                            record.batch || "—"
+                        )}
+
+                        ·
+
+                        ${escapeHtml(
+                            record.manufacturer || "Unknown manufacturer"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="alert-badge">
+
+                    NSQ
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+function renderTable(records) {
+
+    const table =
+        document.getElementById(
+            "recordsTable"
+        );
+
+
+    if (!records.length) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="loading">
+
+                    No matching records.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    table.innerHTML =
+        records.map(record => `
+
+            <tr>
+
+                <td>
+                    ${escapeHtml(
+                        record.medicine || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.manufacturer || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.batch || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.reason || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.expiry_date || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.reported_by || "—"
+                    )}
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   CHECK BATCH
+========================================================= */
+
+async function checkBatch() {
+
+    const medicine =
+        document.getElementById(
+            "medicine"
+        ).value.trim();
+
+
+    const manufacturer =
+        document.getElementById(
+            "manufacturer"
+        ).value.trim();
+
+
+    const batch =
+        document.getElementById(
+            "batch"
+        ).value.trim();
+
+
+    const result =
+        document.getElementById(
+            "checkResult"
+        );
+
+
+    if (
+        !medicine ||
+        !manufacturer ||
+        !batch
+    ) {
+
+        result.className =
+            "check-result show";
+
+
+        result.innerHTML = `
+
+            <div class="result-heading match">
+
+                Please enter all three fields.
+
+            </div>
+
+
+            <div class="result-details">
+
+                Medicine, manufacturer and batch number
+                are required.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    result.className =
+        "check-result show";
+
+
+    result.innerHTML = `
+
+        <div class="result-heading">
+
+            Checking batch...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/check",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        medicine:
+                            medicine,
+
+                        manufacturer:
+                            manufacturer,
+
+                        batch:
+                            batch
+
+                    })
+
+                }
+            );
+
+
+        if (response.redirected) {
+
+            window.location.href =
+                "/login";
+
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (data.recalled) {
+
+            result.innerHTML = `
+
+                <div class="result-heading match">
+
+                    ⚠ MATCH FOUND
+
+                </div>
+
+
+                <div class="result-details">
+
+                    <strong>
+                        ${escapeHtml(
+                            data.medicine
+                        )}
+                    </strong>
+
+                    <br>
+
+                    Batch:
+                    ${escapeHtml(
+                        data.batch
+                    )}
+
+                    <br>
+
+                    Manufacturer:
+                    ${escapeHtml(
+                        data.manufacturer
+                    )}
+
+                    <br>
+
+                    Reason:
+                    ${escapeHtml(
+                        data.reason
+                    )}
+
+                </div>
+
+            `;
+
+        } else {
+
+            result.innerHTML = `
+
+                <div class="result-heading safe">
+
+                    ✓ NO MATCH FOUND
+
+                </div>
+
+
+                <div class="result-details">
+
+                    No matching record was found in
+                    the current RecallGuard dataset.
+
+                </div>
+
+            `;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        result.innerHTML = `
+
+            <div class="result-heading match">
+
+                Something went wrong.
+
+            </div>
+
+
+            <div class="result-details">
+
+                Please make sure the RecallGuard
+                server is running.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function filterTable() {
+
+    const query =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    if (!query) {
+
+        renderTable(allRecords);
+
+        return;
+    }
+
+
+    const filtered =
+        allRecords.filter(record => {
+
+            const medicine =
+                (
+                    record.medicine || ""
+                ).toLowerCase();
+
+
+            const manufacturer =
+                (
+                    record.manufacturer || ""
+                ).toLowerCase();
+
+
+            const batch =
+                (
+                    record.batch || ""
+                ).toLowerCase();
+
+
+            return (
+
+                medicine.includes(query) ||
+
+                manufacturer.includes(query) ||
+
+                batch.includes(query)
+
+            );
+
+        });
+
+
+    renderTable(filtered);
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToSection(id) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (element) {
+
+        element.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadDashboard();
+
 </script>
 
+
 </body>
+
 </html>

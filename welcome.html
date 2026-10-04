@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RecallGuard | Medicine Safety</title>
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080c19;
+
+            --panel: #10182a;
+            --panel-2: #0d1424;
+
+            --border: #283550;
+            --border-light: #34415d;
+
+            --white: #f7f8fc;
+            --text: #dce1eb;
+
+            --muted: #a0abc0;
+            --muted-light: #b2bbcc;
+            --muted-dark: #6f7c94;
+
+            --purple: #7955ff;
+            --purple-light: #a184ff;
+
+            --green: #65d6a0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: var(--bg);
+
+            color: var(--white);
+
+            min-height: 100vh;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        .page {
+            min-height: 100vh;
+
+            position: relative;
+
+            overflow-x: hidden;
+        }
+
+        .glow-one {
+            position: fixed;
+
+            width: 550px;
+            height: 550px;
+
+            top: -300px;
+            left: -200px;
+
+            border-radius: 50%;
+
+            background: rgba(91, 62, 220, 0.13);
+
+            filter: blur(140px);
+
+            pointer-events: none;
+        }
+
+        .glow-two {
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            right: -300px;
+            bottom: -300px;
+
+            border-radius: 50%;
+
+            background: rgba(70, 90, 180, 0.09);
+
+            filter: blur(140px);
+
+            pointer-events: none;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .topbar {
+            width: 90%;
+            max-width: 1280px;
+
+            height: 82px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+        .logo img {
+            width: 190px;
+
+            display: block;
+        }
+
+        .nav-right {
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+        }
+
+        .system-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #9aa6bb;
+
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 12px rgba(101, 214, 160, 0.5);
+        }
+
+        .nav-description {
+            color: #7d899f;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            width: 90%;
+            max-width: 1280px;
+
+            margin: auto;
+
+            padding: 50px 0 70px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            max-width: 820px;
+
+            margin-bottom: 40px;
+        }
+
+        .hero-label {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            color: #a28cff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.6px;
+
+            margin-bottom: 18px;
+        }
+
+        .label-line {
+            width: 22px;
+            height: 1px;
+
+            background: var(--purple);
+        }
+
+        .hero h1 {
+            font-size: clamp(44px, 5vw, 64px);
+
+            line-height: 1.04;
+
+            letter-spacing: -2.5px;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--purple-light);
+        }
+
+        .hero-description {
+            max-width: 760px;
+
+            color: var(--muted);
+
+            font-size: 17px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           TOP CONTENT
+        ===================================================== */
+
+        .top-section {
+            display: grid;
+
+            grid-template-columns: 1.35fr 0.65fr;
+
+            gap: 28px;
+
+            align-items: stretch;
+        }
+
+
+        /* =====================================================
+           PRODUCT CARD
+        ===================================================== */
+
+        .product-card {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(18, 27, 47, 0.98),
+                    rgba(11, 17, 30, 0.98)
+                );
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.30);
+        }
+
+        .product-top {
+            height: 52px;
+
+            padding: 0 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .browser-dots {
+            display: flex;
+
+            gap: 7px;
+        }
+
+        .browser-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #39455e;
+        }
+
+        .product-title {
+            color: #77849c;
+
+            font-size: 12px;
+        }
+
+        .product-body {
+            padding: 27px;
+        }
+
+        .product-heading {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .product-heading h2 {
+            font-size: 20px;
+
+            line-height: 1.3;
+        }
+
+        .preview-badge {
+            flex-shrink: 0;
+
+            padding: 7px 10px;
+
+            border-radius: 7px;
+
+            color: #a891ff;
+
+            background: rgba(121, 85, 255, 0.09);
+
+            border: 1px solid rgba(121, 85, 255, 0.25);
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           PRODUCT FIELDS
+        ===================================================== */
+
+        .fields {
+            display: grid;
+
+            grid-template-columns: 1.5fr 0.65fr 0.85fr;
+
+            gap: 11px;
+        }
+
+        .field {
+            min-width: 0;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            background: #090f1d;
+
+            border: 1px solid #2a3752;
+        }
+
+        .field-label {
+            color: #718099;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 8px;
+        }
+
+        .field-value {
+            color: #e3e7ef;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        /* =====================================================
+           ACTION
+        ===================================================== */
+
+        .action-row {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-top: 17px;
+        }
+
+        .ready-text {
+            color: #8793a9;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        .check-button {
+            flex-shrink: 0;
+
+            padding: 12px 20px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7654f5,
+                    #9061ff
+                );
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 25px rgba(121, 85, 255, 0.22);
+
+            transition: 0.2s;
+        }
+
+        .check-button:hover {
+            transform: translateY(-1px);
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result {
+            margin-top: 18px;
+
+            padding: 17px;
+
+            border-radius: 10px;
+
+            background: rgba(121, 85, 255, 0.06);
+
+            border: 1px solid rgba(121, 85, 255, 0.23);
+        }
+
+        .result-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 9px;
+        }
+
+        .match-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #ad99ff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .match-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #9b7cff;
+        }
+
+        .source {
+            color: #78859c;
+
+            font-size: 11px;
+        }
+
+        .result-title {
+            color: #e1e5ed;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            line-height: 1.4;
+
+            margin-bottom: 5px;
+        }
+
+        .result-info {
+            color: #9aa6bb;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        .reason {
+            margin-top: 10px;
+
+            color: #8793a9;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           AUTH CARD
+        ===================================================== */
+
+        .auth-card {
+            padding: 32px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(18, 27, 47, 0.98),
+                    rgba(12, 18, 32, 0.98)
+                );
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.30);
+        }
+
+        .auth-label {
+            color: #a28cff;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.6px;
+
+            margin-bottom: 18px;
+        }
+
+        .auth-card h2 {
+            font-size: 28px;
+
+            line-height: 1.2;
+
+            letter-spacing: -0.7px;
+
+            margin-bottom: 13px;
+        }
+
+        .auth-description {
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.65;
+
+            margin-bottom: 26px;
+        }
+
+        .auth-button {
+            width: 100%;
+
+            height: 49px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .login-button {
+            color: white;
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7654f8,
+                    #9062ff
+                );
+
+            margin-bottom: 11px;
+        }
+
+        .signup-button {
+            color: #e1e5ed;
+
+            background: #111a2d;
+
+            border: 1px solid #35415c;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .auth-note {
+            margin-top: 23px;
+
+            padding-top: 19px;
+
+            border-top: 1px solid #253047;
+
+            color: #7e8ba2;
+
+            font-size: 11px;
+
+            line-height: 1.65;
+        }
+
+
+        /* =====================================================
+           HOW TO USE
+        ===================================================== */
+
+        .guide {
+            margin-top: 55px;
+        }
+
+        .guide-label {
+            color: #a28cff;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.6px;
+
+            margin-bottom: 9px;
+        }
+
+        .guide-header h2 {
+            font-size: 28px;
+
+            letter-spacing: -0.6px;
+
+            margin-bottom: 9px;
+        }
+
+        .guide-header p {
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            margin-bottom: 22px;
+        }
+
+
+        /* =====================================================
+           STEPS
+        ===================================================== */
+
+        .steps {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 13px;
+        }
+
+        .step {
+            min-height: 175px;
+
+            padding: 21px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(15, 23, 40, 0.78);
+
+            border: 1px solid #283550;
+
+            transition: 0.2s;
+        }
+
+        .step:hover {
+            transform: translateY(-2px);
+
+            border-color: #3b4865;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 8px;
+
+            color: #aa96ff;
+
+            background: rgba(121, 85, 255, 0.10);
+
+            border: 1px solid rgba(121, 85, 255, 0.25);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            margin-bottom: 17px;
+        }
+
+        .step h3 {
+            color: #e0e4ec;
+
+            font-size: 15px;
+
+            line-height: 1.4;
+
+            margin-bottom: 9px;
+        }
+
+        .step p {
+            color: #919db2;
+
+            font-size: 12px;
+
+            line-height: 1.65;
+        }
+
+
+        /* =====================================================
+           DATA STRIP
+        ===================================================== */
+
+        .data-strip {
+            margin-top: 18px;
+
+            padding: 17px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            border-radius: 11px;
+
+            background: rgba(15, 23, 40, 0.60);
+
+            border: 1px solid #283550;
+        }
+
+        .data-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+        .data-icon {
+            width: 32px;
+            height: 32px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 8px;
+
+            color: var(--green);
+
+            background: rgba(101, 214, 160, 0.08);
+
+            border: 1px solid rgba(101, 214, 160, 0.18);
+
+            font-size: 14px;
+        }
+
+        .data-title {
+            color: #d9dee8;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+        .data-subtitle {
+            color: #78859c;
+
+            font-size: 10px;
+
+            line-height: 1.4;
+        }
+
+        .data-count {
+            color: #e3e7ef;
+
+            font-size: 23px;
+
+            font-weight: 700;
+
+            text-align: right;
+        }
+
+        .data-count span {
+            display: block;
+
+            color: #748097;
+
+            font-size: 10px;
+
+            font-weight: 400;
+
+            margin-top: 2px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+            margin-top: 50px;
+
+            padding-top: 22px;
+
+            border-top: 1px solid #1d2940;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            color: #5c6880;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card {
+                max-width: 600px;
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                width: 88%;
+
+                height: 72px;
+            }
+
+            .logo img {
+                width: 155px;
+            }
+
+            .nav-description {
+                display: none;
+            }
+
+            .main {
+                width: 88%;
+
+                padding-top: 35px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+
+                letter-spacing: -1.5px;
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .fields {
+                grid-template-columns: 1fr;
+            }
+
+            .field-value {
+                font-size: 13px;
+
+                white-space: normal;
+            }
+
+            .action-row {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .check-button {
+                width: 100%;
+            }
+
+            .product-heading {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .step {
+                min-height: auto;
+            }
+
+            .data-strip {
+                align-items: flex-start;
+            }
+
+            .footer {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 8px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <div class="glow-one"></div>
+    <div class="glow-two"></div>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+
+    <header class="topbar">
+
+        <div class="logo">
+
+            <img
+                src="logo.png"
+                alt="RecallGuard">
+
+        </div>
+
+
+        <div class="nav-right">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                System operational
+
+            </div>
+
+
+            <div class="nav-description">
+
+                Medicine Safety Intelligence
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- =================================================
+             HERO
+        ================================================= -->
+
+        <section class="hero">
+
+
+            <div class="hero-label">
+
+                <span class="label-line"></span>
+
+                MEDICINE SAFETY INTELLIGENCE
+
+            </div>
+
+
+            <h1>
+
+                Check every batch.
+                <span>Know the risk.</span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                RecallGuard helps verify medicine batches against
+                regulatory quality records, making it easier to
+                identify potentially recalled or substandard medicines.
+
+            </p>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRODUCT + AUTH
+        ================================================= -->
+
+        <section class="top-section">
+
+
+            <!-- =============================================
+                 PRODUCT PREVIEW
+            ============================================== -->
+
+            <div class="product-card">
+
+
+                <div class="product-top">
+
+                    <div class="browser-dots">
+
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+
+                    </div>
+
+
+                    <div class="product-title">
+
+                        RecallGuard / Batch Verification
+
+                    </div>
+
+
+                    <div></div>
+
+                </div>
+
+
+                <div class="product-body">
+
+
+                    <div class="product-heading">
+
+                        <h2>
+                            Check a medicine batch
+                        </h2>
+
+
+                        <div class="preview-badge">
+
+                            PRODUCT PREVIEW
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FIELDS -->
+
+                    <div class="fields">
+
+
+                        <div class="field">
+
+                            <div class="field-label">
+                                MEDICINE
+                            </div>
+
+
+                            <div class="field-value">
+
+                                Dextrose Injection I.P.
+                                5%w/v (D5)
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <div class="field-label">
+                                BATCH
+                            </div>
+
+
+                            <div class="field-value">
+
+                                1-3098
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <div class="field-label">
+                                MANUFACTURER
+                            </div>
+
+
+                            <div class="field-value">
+
+                                Tam-Bran
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ACTION -->
+
+                    <div class="action-row">
+
+
+                        <div class="ready-text">
+
+                            Example batch ready for verification.
+
+                        </div>
+
+
+                        <button
+                            class="check-button"
+                            onclick="window.location.href='/login'">
+
+                            CHECK BATCH
+
+                        </button>
+
+
+                    </div>
+
+
+
+                    <!-- RESULT -->
+
+                    <div class="result">
+
+
+                        <div class="result-top">
+
+
+                            <div class="match-status">
+
+                                <span class="match-dot"></span>
+
+                                MATCH FOUND
+
+                            </div>
+
+
+                            <div class="source">
+
+                                CDSCO • June 2025
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="result-title">
+
+                            Dextrose Injection I.P.
+                            5%w/v (D5)
+
+                        </div>
+
+
+                        <div class="result-info">
+
+                            Batch 1-3098
+                            ·
+                            Tam-Bran Pharmaceuticals Pvt. Ltd.
+
+                        </div>
+
+
+                        <div class="reason">
+
+                            NSQ reason:
+                            Assay of Dextrose (Anhydrous)
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 LOGIN CARD
+            ============================================== -->
+
+            <div class="auth-card">
+
+
+                <div class="auth-label">
+
+                    RECALLGUARD
+
+                </div>
+
+
+                <h2>
+
+                    Medicine safety,
+                    simplified.
+
+                </h2>
+
+
+                <p class="auth-description">
+
+                    Sign in to access batch verification,
+                    recall alerts and medicine quality records.
+
+                </p>
+
+
+                <button
+                    class="auth-button login-button"
+                    onclick="window.location.href='/login'">
+
+                    Log In
+
+                </button>
+
+
+                <button
+                    class="auth-button signup-button"
+                    onclick="window.location.href='/signup'">
+
+                    Create Account
+
+                </button>
+
+
+                <div class="auth-note">
+
+                    Use RecallGuard to check medicine batches
+                    against the available regulatory quality dataset.
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             HOW TO USE
+        ================================================= -->
+
+        <section class="guide">
+
+
+            <div class="guide-header">
+
+
+                <div class="guide-label">
+
+                    HOW TO USE RECALLGUARD
+
+                </div>
+
+
+                <h2>
+
+                    Verify a medicine batch in 4 steps.
+
+                </h2>
+
+
+                <p>
+
+                    Enter the details printed on the medicine pack.
+                    RecallGuard compares them with its available
+                    regulatory records.
+
+                </p>
+
+
+            </div>
+
+
+
+            <div class="steps">
+
+
+                <!-- STEP 1 -->
+
+                <div class="step">
+
+
+                    <div class="step-number">
+                        01
+                    </div>
+
+
+                    <h3>
+                        Enter the medicine
+                    </h3>
+
+
+                    <p>
+
+                        Enter the medicine name exactly as
+                        shown on the medicine packaging.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- STEP 2 -->
+
+                <div class="step">
+
+
+                    <div class="step-number">
+                        02
+                    </div>
+
+
+                    <h3>
+                        Add the manufacturer
+                    </h3>
+
+
+                    <p>
+
+                        Enter the manufacturer or company
+                        name printed on the product.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- STEP 3 -->
+
+                <div class="step">
+
+
+                    <div class="step-number">
+                        03
+                    </div>
+
+
+                    <h3>
+                        Enter the batch number
+                    </h3>
+
+
+                    <p>
+
+                        Enter the exact batch or lot number
+                        printed on the medicine pack.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- STEP 4 -->
+
+                <div class="step">
+
+
+                    <div class="step-number">
+                        04
+                    </div>
+
+
+                    <h3>
+                        Check the result
+                    </h3>
+
+
+                    <p>
+
+                        RecallGuard compares the details with
+                        available records and shows whether a
+                        matching record is found.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DATA STRIP
+            ================================================= -->
+
+            <div class="data-strip">
+
+
+                <div class="data-left">
+
+
+                    <div class="data-icon">
+
+                        ✓
+
+                    </div>
+
+
+                    <div>
+
+
+                        <div class="data-title">
+
+                            Current prototype dataset
+
+                        </div>
+
+
+                        <div class="data-subtitle">
+
+                            CDSCO NSQ records • June 2025
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="data-count">
+
+                    55
+
+                    <span>
+                        records
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================= -->
+
+        <footer class="footer">
+
+
+            <div>
+
+                RecallGuard © 2026
+
+            </div>
+
+
+            <div>
+
+                Medicine Safety Intelligence
+
+            </div>
+
+
+        </footer>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
